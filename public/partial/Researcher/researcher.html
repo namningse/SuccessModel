@@ -1,0 +1,46 @@
+<div ui-view>
+
+
+    <div id="ResearcherMainPanel">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>การจัดการรายการนักวิจัย</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <button class="btn btn-primary" ui-sref="researcher.add">เพิ่มรายการนักวิจัย</button>
+            </div>
+        </div>
+
+        <div id="researcherTable" class="row">
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Faculty</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="researcher in allResearcher">
+                            <td>{{researcher.id}}</td>
+                            <td>{{researcher.title}} {{researcher.firstname}} {{researcher.lastname}}</td>
+                            <td>{{researcher.faculty.name}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" ui-sref="researcher.edit({researcherId:researcher.id})" class="btn btn-primary">Edit</button>
+                                    <button type="button" ng-click="deleteResearcher(researcher)" class="btn btn-danger">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr ng-hide="allResearcher.length"><td colspan="4" class='danger'><center>No Data</center></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

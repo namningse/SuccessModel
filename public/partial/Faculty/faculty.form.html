@@ -1,0 +1,36 @@
+<div id="facutltyAddPanel">
+    
+    <div class="row">
+        <div class="col-lg-12">
+
+            <form class="form-horizontal" role="form">
+                <fieldset>
+                    <legend>
+                        <h3 ng-if="isAddOrEdit === 'ADD'">เพิ่มรายการคณะ</h3>
+                        <h3 ng-if="isAddOrEdit === 'EDIT'">แก้ไขรายการคณะ</h3>
+                    </legend>
+                    <div class="form-group">
+                        <label for="faculty.name" class="col-sm-2 control-label">Faculty Name</label>
+                        <div class="col-sm-10">
+                            <input ng-model="faculty.name" type="text" class="form-control" placeholder="Faculty Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="faculty.description" class="col-sm-2 control-label">Faculty Description</label>
+                        <div class="col-sm-10">
+                            <textarea ckeditor="editorOptions" ng-model="faculty.description" type="text" class="form-control" placeholder="Faculty Description"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" ng-click="submitAddFaculty()" class="btn btn-primary">Submit</button>
+                        <button type="button" ui-sref="faculty" class="btn btn-default">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
