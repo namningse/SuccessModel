@@ -14,7 +14,7 @@
 class Researcher extends NeoEloquent{
     
     public function faculty(){
-        return $this->belongsTo('Faculty','IN');
+        return $this->belongsTo('Faculty','HAS');
     }
     
 }

@@ -33,13 +33,21 @@ class ResearcherApiController extends \BaseController {
      */
     public function store() {
 
-        $faculty = Faculty::find(Input::get('faculty'));
+
+
+
         $researcher = new Researcher();
         $researcher->title = Input::get('title');
         $researcher->firstname = Input::get('firstname');
         $researcher->lastname = Input::get('lastname');
-        $researcher->faculty()->save($faculty);
         $researcher->save();
+
+        if (Input::has('faculty')) {
+            $faculty = Faculty::find(Input::get('faculty'));
+            $researcher->faculty()->associate($faculty)->save();
+        }
+
+
         return $researcher;
     }
 
@@ -71,13 +79,21 @@ class ResearcherApiController extends \BaseController {
      * @return Response
      */
     public function update($id) {
+
         $faculty = Faculty::find(Input::get('faculty'));
         $researcher = Researcher::find($id);
         $researcher->title = Input::get('title');
         $researcher->firstname = Input::get('firstname');
         $researcher->lastname = Input::get('lastname');
         $researcher->save();
-        $faculty->researchers()->save($researcher);
+        
+        if (Input::has('faculty')) {
+            $faculty = Faculty::find(Input::get('faculty'));
+            $researcher->faculty()->dissociate();
+            $researcher->faculty()->associate($faculty)->save();
+        }else {
+            $researcher->faculty()->dissociate();
+        }
 
         return $researcher;
     }
@@ -89,7 +105,9 @@ class ResearcherApiController extends \BaseController {
      * @return Response
      */
     public function destroy($id) {
-        //
+        Researcher::destroy(intval($id));
+        return [$id];
+        
     }
 
 }

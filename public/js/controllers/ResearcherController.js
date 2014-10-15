@@ -5,10 +5,9 @@ app.controller('ResearcherFormController', function($scope, Researcher, $state, 
     $scope.isAddOrEdit = 'ADD';
     $scope.researcher = {};
     $scope.allFaculty = {};
-    $scope.selFaculty = 0;
     $scope.$on('$viewContentLoaded',
             function(event) {
-
+      
                 Faculty.get().success(function(data) {
                     $scope.allFaculty = data;
                 });
@@ -19,7 +18,6 @@ app.controller('ResearcherFormController', function($scope, Researcher, $state, 
                     $scope.isAddOrEdit = 'EDIT';
                     Researcher.edit($stateParams.researcherId).success(function(data) {
                         $scope.researcher = data;
-                        $scope.selFaculty = $scope.researcher.faculty.id;
                         console.log($scope.researcher);
                     });
                 }
@@ -28,7 +26,7 @@ app.controller('ResearcherFormController', function($scope, Researcher, $state, 
     $scope.submitAddResearcher = function() {
 
         var researcher = $scope.researcher;
-        researcher.faculty = $scope.selFaculty;
+        researcher.faculty = researcher.faculty.id;
         if ($scope.isAddOrEdit === 'ADD') {
             
             Researcher.store(researcher).success(function(data) {
@@ -45,7 +43,20 @@ app.controller('ResearcherFormController', function($scope, Researcher, $state, 
 
 });
 
-app.controller('ResearcherController', function($scope, $modal, Faculty, Researcher) {
+var DeleteResearcherModalController = function($scope, $modalInstance, researcher) {
+
+    $scope.researcher = researcher;
+    $scope.ok = function() {
+        $modalInstance.close(true);
+    };
+
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+};
+
+
+app.controller('ResearcherController', function($scope, $modal, Researcher) {
 
     $scope.allResearcher = {};
 
@@ -59,4 +70,28 @@ app.controller('ResearcherController', function($scope, $modal, Faculty, Researc
         $scope.loadAll();
     });
     //console.log('ResearcherController');
+    
+    
+    $scope.deleteResearcher = function(researcher) {
+
+        //show modal
+        var modalInstance = $modal.open({
+            templateUrl: 'partial/researcher/researcher.delete.html',
+            controller: 'DeleteResearcherModalController',
+            resolve: {
+                researcher: function() {
+                    return researcher;
+                }
+            }
+        });
+
+        modalInstance.result.then(function(result) {
+            if (result) {
+                Researcher.destroy(researcher)
+                        .success(function(data) {
+                            $scope.loadAll();
+                        });
+            }
+        });
+    };
 });

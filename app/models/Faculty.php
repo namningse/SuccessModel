@@ -14,7 +14,7 @@
 class Faculty extends NeoEloquent{
     
     public function researchers(){
-        return $this->hasMany('Researcher','IN');
+        return $this->hasMany('Researcher','HAS');
     }
     
 }
